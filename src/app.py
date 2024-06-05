@@ -10,10 +10,6 @@ from api.models import db, User
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
-
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import get_jwt_identity
-from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 
 # Setup the Flask-JWT-Extended extension
@@ -77,46 +73,8 @@ def serve_any_other_file(path):
     response.cache_control.max_age = 0  # avoid cache memory
     return response
 
-@app.route('/api/signup', methods=['POST'])
-def signup():
-    body = request.get_json(silent=True)
-    if body is None: 
-        return jsonify({'msg': "Debes enviar info en el body"}), 400
-    if 'email' not in body:
-        return jsonify({'msg': "El campo email es obligatorio"}), 400
-    if 'password' not in body:
-        return jsonify({'msg': "El campo password es obligatorio"}), 400
-    new_user = User()
-    new_user.email = body['email']
-    new_user.password = body['password']
-    new_user.is_active = True
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify({'msg': "El usuario ha sido creado con éxito"}), 201
 
 
-@app.route('/api/login', methods=['POST'])
-def login():
-    body = request.get_json(silent=True)
-    if body is None: 
-        return jsonify({'msg': "Debes enviar info en el body"}), 400
-    if 'email' not in body:
-        return jsonify({'msg': "El campo email es obligatorio"}), 400
-    if 'password' not in body:
-        return jsonify({'msg': "El campo password es obligatorio"}), 400
-    user = User.query.filter_by(email=body['email']).first()
-    if user is None: 
-        return jsonify({'msg': "El usuario no existe"})
-    if user.password != body['password']:
-        return jsonify({'msg': "Contraseñla incorrecta"})
-    access_token = create_access_token(identity=user.email)
-    return jsonify({'msg': 'Login Successful', 'token': access_token})
-
-@app.route("/api/protected", methods=["GET"])
-@jwt_required()
-def protected():
-    current_user = get_jwt_identity()
-    return jsonify(logged_in_as=current_user), 200 
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':

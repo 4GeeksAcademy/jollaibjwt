@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from 'react-router-dom';
 import { Context } from "../store/appContext";
 import rigoImageUrl from "../../img/rigo-baby.jpg";
@@ -6,6 +6,11 @@ import "../../styles/home.css";
 
 export const LoginPage = () => {
 	const { store, actions } = useContext(Context);
+
+	const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    })
 
     
     const handleChange = (e) => {
@@ -18,7 +23,7 @@ export const LoginPage = () => {
 
 
     const handleLogin = async () => {
-		const response = await fetch('/api/login', {
+		const response = await fetch('https://opulent-space-succotash-gr7wxj4jrvjfpg5q-3001.app.github.dev/api/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -27,10 +32,21 @@ export const LoginPage = () => {
 		});
 		const data = await response.json();
 		if (response.ok) {
-			setMessage(data.msg);
+			console.log('logged in')
 		} else {
-			setMessage(data.msg);
+			console.log('An error has occured')
 		}
+	};
+
+
+	const handleSubmit = async () => {
+		const response = await fetch('https://opulent-space-succotash-gr7wxj4jrvjfpg5q-3001.app.github.dev/api/signup', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(formData)
+		});
 	};
 
 	return (

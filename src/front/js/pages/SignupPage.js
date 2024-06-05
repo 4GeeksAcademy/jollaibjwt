@@ -20,19 +20,13 @@ export const SingupPage = () => {
 	};
 
     const handleSubmit = async () => {
-		const response = await fetch('/api/signup', {
+		const response = await fetch('https://opulent-space-succotash-gr7wxj4jrvjfpg5q-3001.app.github.dev/api/signup', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(formData)
 		});
-		const data = await response.json();
-		if (response.ok) {
-			setMessage(data.msg);
-		} else {
-			setMessage(data.msg);
-		}
 	};
 
     useEffect(()=>{
