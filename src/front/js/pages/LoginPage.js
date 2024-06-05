@@ -39,15 +39,7 @@ export const LoginPage = () => {
 	};
 
 
-	const handleSubmit = async () => {
-		const response = await fetch('https://opulent-space-succotash-gr7wxj4jrvjfpg5q-3001.app.github.dev/api/signup', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(formData)
-		});
-	};
+	
 
 	return (
 		<div className="text-center mx-5 mt-5">
